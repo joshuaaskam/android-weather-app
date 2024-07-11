@@ -5,7 +5,7 @@ import com.example.weatherapp.model.WeeklyWeatherForecast
 import com.example.weatherapp.network.WeatherApiService
 
 interface WeatherForecastRepository {
-    suspend fun getHourlyForecast(): HourlyWeatherForecast
+    suspend fun getHourlyForecast(latitude: Float, longitude: Float): HourlyWeatherForecast
 
     suspend fun getWeeklyForecast(): WeeklyWeatherForecast
 }
@@ -13,8 +13,8 @@ interface WeatherForecastRepository {
 class NetworkWeatherForecastRepository(
     private val weatherApiService: WeatherApiService
 ) : WeatherForecastRepository {
-    override suspend fun getHourlyForecast(): HourlyWeatherForecast {
-        TODO("Not yet implemented")
+    override suspend fun getHourlyForecast(latitude: Float, longitude: Float): HourlyWeatherForecast {
+        return weatherApiService.getHourlyWeatherForecast(latitude = latitude, longitude = longitude)
     }
 
     override suspend fun getWeeklyForecast(): WeeklyWeatherForecast {
