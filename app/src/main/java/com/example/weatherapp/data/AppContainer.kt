@@ -11,7 +11,7 @@ interface AppContainer {
 }
 
 class DefaultAppContainer : AppContainer {
-    private val baseUrl = "https://open-meteo.com/"
+    private val baseUrl = "https://api.open-meteo.com/"
 
     // Retrofit builder will build a retrofit object using a kotlinx.serialization converter
     private val retrofit: Retrofit = Retrofit.Builder()

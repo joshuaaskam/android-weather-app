@@ -32,6 +32,6 @@ data class HourlyUnits(
 data class Hourly(
     val time: List<String>,
     @SerialName(value = "temperature_2m")
-    val temperature2m: String
+    val temperature2m: List<Float>
 )
 
