@@ -13,7 +13,6 @@ interface WeatherForecastRepository {
 class NetworkWeatherForecastRepository(
     private val weatherApiService: WeatherApiService
 ) : WeatherForecastRepository {
-    /** Fetches list of MarsPhoto from marsApi*/
     override suspend fun getHourlyForecast(): HourlyWeatherForecast {
         TODO("Not yet implemented")
     }
