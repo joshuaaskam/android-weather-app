@@ -3,6 +3,7 @@
 package com.example.weatherapp.ui
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -17,6 +18,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.weatherapp.R
 import com.example.weatherapp.ui.screens.ForecastScreen
 import com.example.weatherapp.ui.screens.WeatherUiState
 import com.example.weatherapp.ui.screens.WeatherViewModel
@@ -30,7 +32,7 @@ fun WeatherApp() {
         topBar = { WeatherTopAppBar(scrollBehavior = scrollBehavior) }
     ) {
         Surface(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize().padding(it)
         ) {
             val weatherViewModel: WeatherViewModel =
                 viewModel(factory = WeatherViewModel.Factory)
@@ -49,7 +51,7 @@ fun WeatherTopAppBar(scrollBehavior: TopAppBarScrollBehavior, modifier: Modifier
         scrollBehavior = scrollBehavior,
         title = {
             Text(
-                text = "Current Location",
+                text = stringResource(R.string.current_location),
                 style = MaterialTheme.typography.headlineSmall,
             )
         },
