@@ -14,4 +14,13 @@ interface WeatherApiService {
         @Query("timezone") timeZone: String = "auto",
         @Query("forecast_days") forecastDays: Int = 1
     ): HourlyWeatherForecast
+
+    @GET("v1/forecast")
+    suspend fun getWeeklyWeatherForecast(
+        @Query("latitude") latitude: Float,
+        @Query("longitude") longitude: Float,
+        @Query("daily") daily: String = "temperature_2m_max,temperature_2m_min",
+        @Query("temperature_unit") temperatureUnit: String = "fahrenheit",
+        @Query("timezone") timeZone: String = "auto",
+    ): WeeklyWeatherForecast
 }

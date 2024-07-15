@@ -12,13 +12,17 @@ import com.example.weatherapp.WeatherForecastApplication
 import com.example.weatherapp.data.NetworkWeatherForecastRepository
 import com.example.weatherapp.data.WeatherForecastRepository
 import com.example.weatherapp.model.HourlyWeatherForecast
+import com.example.weatherapp.model.WeeklyWeatherForecast
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
 
 // Represents different states of the API request
 sealed interface WeatherUiState {
-    data class Success(val hourlyForecast: HourlyWeatherForecast) : WeatherUiState
+    data class Success(
+        val hourlyForecast: HourlyWeatherForecast,
+        val weeklyForecast: WeeklyWeatherForecast
+    ) : WeatherUiState
     data class Error(val errorMessage: String) : WeatherUiState
     data object Loading : WeatherUiState
 }
@@ -30,17 +34,19 @@ class WeatherViewModel(private val weatherForecastRepository: WeatherForecastRep
 
     //Call on init so we can display forecast immediately.
     init {
-        getHourlyForecast(latitude = 33.86f, longitude = -118.08f)
+        getForecast(latitude = 33.86f, longitude = -118.08f)
     }
 
     // Gets hourly weather forecast from the weather API Retrofit service and updates the
     // hourly forecast.
-    fun getHourlyForecast(latitude: Float, longitude: Float) {
+    fun getForecast(latitude: Float, longitude: Float) {
         viewModelScope.launch {
             weatherUiState = WeatherUiState.Loading
             weatherUiState = try {
-                // Using
-                WeatherUiState.Success(weatherForecastRepository.getHourlyForecast(latitude = latitude, longitude= longitude))
+                WeatherUiState.Success(
+                    hourlyForecast = weatherForecastRepository.getHourlyForecast(latitude = latitude, longitude= longitude),
+                    weeklyForecast = weatherForecastRepository.getWeeklyForecast(latitude = latitude, longitude = longitude)
+                )
             } catch (e: IOException) {
                 WeatherUiState.Error(e.toString())
             } catch (e: HttpException) {

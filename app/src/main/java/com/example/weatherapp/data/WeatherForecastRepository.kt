@@ -7,7 +7,7 @@ import com.example.weatherapp.network.WeatherApiService
 interface WeatherForecastRepository {
     suspend fun getHourlyForecast(latitude: Float, longitude: Float): HourlyWeatherForecast
 
-    suspend fun getWeeklyForecast(): WeeklyWeatherForecast
+    suspend fun getWeeklyForecast(latitude: Float, longitude: Float): WeeklyWeatherForecast
 }
 
 class NetworkWeatherForecastRepository(
@@ -17,7 +17,7 @@ class NetworkWeatherForecastRepository(
         return weatherApiService.getHourlyWeatherForecast(latitude = latitude, longitude = longitude)
     }
 
-    override suspend fun getWeeklyForecast(): WeeklyWeatherForecast {
-        TODO("Not yet implemented")
+    override suspend fun getWeeklyForecast(latitude: Float, longitude: Float): WeeklyWeatherForecast {
+        return weatherApiService.getWeeklyWeatherForecast(latitude = latitude, longitude = longitude)
     }
 }

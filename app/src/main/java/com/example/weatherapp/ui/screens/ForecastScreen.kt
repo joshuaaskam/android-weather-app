@@ -29,9 +29,9 @@ fun ForecastScreen(
 ) {
     when (weatherUiState) {
         is WeatherUiState.Loading -> Text(text = "Loading")
-        is WeatherUiState.Success -> HourlyForecastScreen(
-            hourlyForecasts = weatherUiState.hourlyForecast.hourly, contentPadding = contentPadding
-        )
+        is WeatherUiState.Success -> Text(weatherUiState.weeklyForecast.toString())//HourlyForecastScreen(
+            //hourlyForecasts = weatherUiState.hourlyForecast.hourly, contentPadding = contentPadding
+        //)
         is WeatherUiState.Error -> Text(text = weatherUiState.errorMessage) // Should add retry here
     }
 }
@@ -68,12 +68,12 @@ fun HourlyForecastScreen(
 @Composable
 fun HourlyForecastCard(tempHourPair: Pair<String, Float>, modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
-        Text(text = formatTimeString(tempHourPair.first))
+        Text(text = formatTimeStringToHour(tempHourPair.first))
         Text(text = tempHourPair.second.toString() + "\u2109")
     }
 }
 
-fun formatTimeString(input: String): String {
+fun formatTimeStringToHour(input: String): String {
     val dateTime = LocalDateTime.parse(input)
 
     val outputFormatter = DateTimeFormatter.ofPattern("ha")
