@@ -80,9 +80,7 @@ fun WeatherTopAppBar(scrollBehavior: TopAppBarScrollBehavior,
     CenterAlignedTopAppBar(
         scrollBehavior = scrollBehavior,
         title = {
-            Row(
-                horizontalArrangement = Arrangement.SpaceAround
-            ) {
+            Row{
                 TextField(
                     value = editedLatitude,
                     label = { Text(stringResource(R.string.latitude)) },
