@@ -1,6 +1,7 @@
 package com.example.weatherapp.ui.screens
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -32,24 +33,45 @@ class WeatherViewModel(private val weatherForecastRepository: WeatherForecastRep
     var weatherUiState: WeatherUiState by mutableStateOf(WeatherUiState.Loading)
         private set
 
+    private var _latitude: Float by mutableFloatStateOf(0f)
+    private var _longitude: Float by mutableFloatStateOf(0f)
+
+    // These Latitude and longitude values will update the private states and update getForecast
+    // when changed.
+    var latitude: Float
+        get() = _latitude
+        set(value) {
+            _latitude = value
+            getForecast()
+        }
+    var longitude: Float
+        get() = _longitude
+        set(value) {
+            _longitude = value
+            getForecast()
+        }
+
     //Call on init so we can display forecast immediately.
     init {
-        getForecast(latitude = 33.86f, longitude = -118.08f)
+        getForecast()
     }
 
     // Gets hourly weather forecast from the weather API Retrofit service and updates the
     // hourly forecast.
-    fun getForecast(latitude: Float, longitude: Float) {
+    fun getForecast() {
         viewModelScope.launch {
             weatherUiState = WeatherUiState.Loading
             weatherUiState = try {
                 WeatherUiState.Success(
-                    hourlyForecast = weatherForecastRepository.getHourlyForecast(latitude = latitude, longitude= longitude),
-                    weeklyForecast = weatherForecastRepository.getWeeklyForecast(latitude = latitude, longitude = longitude)
+                    hourlyForecast = weatherForecastRepository.getHourlyForecast(latitude = _latitude, longitude= _longitude),
+                    weeklyForecast = weatherForecastRepository.getWeeklyForecast(latitude = _latitude, longitude = _longitude)
                 )
             } catch (e: IOException) {
                 WeatherUiState.Error(e.toString())
             } catch (e: HttpException) {
+                WeatherUiState.Error(e.toString())
+            }
+            catch (e: Exception) {
                 WeatherUiState.Error(e.toString())
             }
         }
