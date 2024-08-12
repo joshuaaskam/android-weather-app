@@ -55,7 +55,7 @@ fun WeatherApp() {
         ) {
             ForecastScreen(
                 weatherUiState = weatherViewModel.weatherUiState,
-                retryAction = { /* TODO */ },
+                retryAction = weatherViewModel::getForecast,
                 contentPadding = it
             )
         }
