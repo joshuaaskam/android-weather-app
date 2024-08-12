@@ -1,16 +1,15 @@
 package com.example.weatherapp.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -18,7 +17,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.weatherapp.R
 import com.example.weatherapp.model.Daily
 import com.example.weatherapp.model.Hourly
 import java.time.LocalDate
@@ -33,7 +35,11 @@ fun ForecastScreen(
     contentPadding: PaddingValues = PaddingValues(0.dp),
 ) {
     when (weatherUiState) {
-        is WeatherUiState.Loading -> Text(text = "Loading")
+        is WeatherUiState.Loading -> Text(
+            text = stringResource(R.string.loading),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(8.dp)
+        )
         is WeatherUiState.Success -> {
             Column(
                 verticalArrangement = Arrangement.Top
@@ -48,7 +54,25 @@ fun ForecastScreen(
                 )
             }
         }
-        is WeatherUiState.Error -> Text(text = weatherUiState.errorMessage) // Should add retry here
+        is WeatherUiState.Error -> {
+            Column (
+                modifier = modifier,
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ){
+                Text(
+                    text = weatherUiState.errorMessage,
+                    modifier = Modifier.padding(8.dp)
+                )
+                Text(
+                    text = stringResource(R.string.loading_failed),
+                    modifier = Modifier.padding(8.dp)
+                )
+                Button(onClick = retryAction) {
+                    Text(stringResource(R.string.retry))
+                }
+            }
+        }
     }
 }
 
@@ -61,7 +85,9 @@ fun HourlyForecast(
     val tempHourPairs = hourlyForecasts.time.zip(hourlyForecasts.temperature2m)
 
     Card(
-        modifier = Modifier.wrapContentHeight().padding(8.dp),
+        modifier = Modifier
+            .wrapContentHeight()
+            .padding(8.dp),
         shape = MaterialTheme.shapes.medium,
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
@@ -93,7 +119,9 @@ fun WeeklyForecast(
     val dayMaxMinPair = dailyForecasts.time.zip(dailyForecasts.temperatureMax.zip(dailyForecasts.temperatureMin))
 
     Card(
-        modifier = Modifier.wrapContentHeight().padding(8.dp),
+        modifier = Modifier
+            .wrapContentHeight()
+            .padding(8.dp),
         shape = MaterialTheme.shapes.medium,
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
     ) {
