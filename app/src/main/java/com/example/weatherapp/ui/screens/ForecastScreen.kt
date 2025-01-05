@@ -140,8 +140,8 @@ fun WeeklyForecast(
 fun DailyForecastCard(dayMaxMinPair: Pair<String, Pair<Float, Float>>, modifier: Modifier = Modifier) {
     Row(modifier = modifier) {
         Text(text = formatDateToDay(dayMaxMinPair.first) + " ")
-        Text(text = dayMaxMinPair.second.first.toString() + "\u2109" + "-")
-        Text(text = dayMaxMinPair.second.second.toString() + "\u2109")
+        Text(text = dayMaxMinPair.second.second.toString() + "\u2109" + "-")
+        Text(text = dayMaxMinPair.second.first.toString() + "\u2109")
     }
 }
 
