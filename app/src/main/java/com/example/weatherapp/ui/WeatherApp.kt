@@ -30,6 +30,7 @@ import com.example.weatherapp.R
 import com.example.weatherapp.ui.screens.ForecastScreen
 import com.example.weatherapp.ui.screens.WeatherViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WeatherApp() {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -38,13 +39,9 @@ fun WeatherApp() {
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = { WeatherTopAppBar(scrollBehavior = scrollBehavior,
-            latitude = weatherViewModel.latitude,
-            longitude = weatherViewModel.longitude,
-            onLatitudeChange = { newLatitude ->
-                weatherViewModel.latitude = newLatitude
-            },
-            onLongitudeChange = { newLongitude ->
-                weatherViewModel.longitude = newLongitude
+            locationName = weatherViewModel.locationName,
+            onLocationChange = { newLocation ->
+                weatherViewModel.locationName = newLocation
             },
         ) }
     ) {
@@ -64,54 +61,28 @@ fun WeatherApp() {
 
 @Composable
 fun WeatherTopAppBar(scrollBehavior: TopAppBarScrollBehavior,
-                     latitude: Float,
-                     longitude: Float,
-                     onLatitudeChange: (Float) -> Unit,
-                     onLongitudeChange: (Float) -> Unit,
+                     locationName: String,
+                     onLocationChange: (String) -> Unit,
                      modifier: Modifier = Modifier) {
-    var editedLatitude by remember { mutableStateOf(latitude.toString()) }
-    var editedLongitude by remember { mutableStateOf(longitude.toString()) }
+    var editedLocation by remember { mutableStateOf(locationName) }
 
     CenterAlignedTopAppBar(
         scrollBehavior = scrollBehavior,
         title = {
             Row{
                 TextField(
-                    value = editedLatitude,
-                    label = { Text(stringResource(R.string.latitude)) },
+                    value = editedLocation,
+                    label = { Text(stringResource(R.string.location)) },
                     onValueChange = {
-                        editedLatitude = it
+                        editedLocation = it
                     },
                     keyboardOptions = KeyboardOptions.Default.copy(
-                        keyboardType = KeyboardType.Number,
+                        keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Done
                     ),
                     keyboardActions = KeyboardActions(onDone = {
-                        // Update latitude
-                        // TODO: Add input validation for a latitude in valid range.
-                        // Ex: Currently, an invalid latitude such as 500.0 will go through.
-                        // Will only update value if it is a valid float.
-                        editedLatitude.toFloatOrNull()?.let { newLatitude ->
-                            onLatitudeChange(newLatitude)
-                        }
-                    })
-                )
-                TextField(
-                    value = editedLongitude,
-                    label = { Text(stringResource(R.string.longitude)) },
-                    onValueChange = {
-                        editedLongitude = it
-                    },
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        keyboardType = KeyboardType.Number,
-                        imeAction = ImeAction.Done
-                    ),
-                    keyboardActions = KeyboardActions(onDone = {
-                        // Update longitude
-                        // TODO: Add input validation for a longitude in valid range.
-                        editedLongitude.toFloatOrNull()?.let { newLongitude ->
-                            onLongitudeChange(newLongitude)
-                        }
+                        // Update location
+                        onLocationChange(editedLocation)
                     })
                 )
             }

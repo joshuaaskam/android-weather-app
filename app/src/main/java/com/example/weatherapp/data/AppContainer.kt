@@ -1,5 +1,6 @@
 package com.example.weatherapp.data
 
+import android.content.Context
 import com.example.weatherapp.network.WeatherApiService
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
@@ -8,9 +9,10 @@ import retrofit2.Retrofit
 
 interface AppContainer {
     val weatherForecastRepository: WeatherForecastRepository
+    val geocoderRepository: GeocoderRepository
 }
 
-class DefaultAppContainer : AppContainer {
+class DefaultAppContainer(private val context: Context) : AppContainer {
     private val baseUrl = "https://api.open-meteo.com/"
 
     // Retrofit builder will build a retrofit object using a kotlinx.serialization converter
@@ -29,4 +31,6 @@ class DefaultAppContainer : AppContainer {
     override val weatherForecastRepository: WeatherForecastRepository by lazy {
         NetworkWeatherForecastRepository(retrofitService)
     }
+
+    override val geocoderRepository: GeocoderRepository = GeocoderRepository(context)
 }
